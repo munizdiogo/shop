@@ -15,13 +15,7 @@ class ProductDetailScreen extends StatelessWidget {
         title: Text(product.title),
       ),
       body: Column(
-        children: [
-          RaisedButton(
-            child: Text('+'),
-            onPressed: () {
-            },
-          ),
-        ],
+        children: [],
       ),
     );
   }
