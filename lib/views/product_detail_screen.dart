@@ -14,6 +14,15 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(product.title),
       ),
+      body: Column(
+        children: [
+          RaisedButton(
+            child: Text('+'),
+            onPressed: () {
+            },
+          ),
+        ],
+      ),
     );
   }
 }
