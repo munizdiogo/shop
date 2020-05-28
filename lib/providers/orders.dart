@@ -25,7 +25,7 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  void addORder(List<CartItem> products, double total) {
+  void addOrder(List<CartItem> products, double total) {
     _orders.insert(
       0,
       Order(
