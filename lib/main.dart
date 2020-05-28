@@ -5,22 +5,29 @@ import './providers/products.dart';
 import './utils/app_routes.dart';
 import './views/product_detail_screen.dart';
 import './views/products_overview_screen.dart';
+import './providers/cart.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-          create: (_) =>   Products(),
-          child: MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+         create: (_) => new Products(),
+        ),
+        ChangeNotifierProvider(
+         create: (_) => new Cart(),
+        ),
+      ],
+      child: MaterialApp(
         title: 'Minha Loja',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato'
-        ),
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato'),
         home: ProductOverviewScreen(),
         routes: {
           AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailScreen(),
