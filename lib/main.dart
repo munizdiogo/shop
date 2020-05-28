@@ -46,3 +46,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// # Conclusão do Capílo 8 - Gerenciamento de Estado.
