@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import '../data/dummy_data.dart';
 import 'product.dart';
@@ -10,8 +12,14 @@ class Products with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  void addProduct(Product product) {
-    _items.add(product);
+  void addProduct(Product newProduct) {
+    _items.add(Product(
+      id: Random().nextDouble().toString(),
+      title: newProduct.title,
+      price: newProduct.price,
+      description: newProduct.description,
+      imageUrl: newProduct.imageUrl
+    ));
     notifyListeners();
   }
 

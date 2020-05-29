@@ -1,7 +1,9 @@
 import 'dart:math';
+import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
-import 'package:shop/providers/product.dart';
+import '../providers/product.dart';
+import '../providers/products.dart';
 
 class ProductFormScreen extends StatefulWidget {
   @override
@@ -22,6 +24,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _imageUrlFocusNode.addListener(_updateImage);
   }
 
+   @override
+  void dispose() {
+    super.dispose();
+    _priceFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _imageUrlFocusNode.removeListener(_updateImage);
+    _imageUrlFocusNode.dispose();
+  }
+
   void _updateImage() {
     if (isValidImageUrl(_imageUrlController.text)) {
       setState(() {});
@@ -38,27 +49,26 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         (endsWithPng || endsWithJpg || endsWithJpge);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _priceFocusNode.dispose();
-    _descriptionFocusNode.dispose();
-    _imageUrlFocusNode.removeListener(_updateImage);
-    _imageUrlFocusNode.dispose();
-  }
+ 
 
   void _saveForm() {
-    var inValid = _form.currentState.validate();
+    var isValid = _form.currentState.validate();
+    if(!isValid){
+      return;
+    }
 
     _form.currentState.save();
 
     final newProduct = Product(
-      id: Random().nextDouble().toString(),
+      id: Random().nextDouble().toString(), // não está utilizando
       title: _formData['title'],
       price: _formData['price'],
       description: _formData['description'],
       imageUrl: _formData['imageUrl'],
     );
+
+    Provider.of<Products>(context, listen: false).addProduct(newProduct);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -129,7 +139,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 validator: (value) {
                   bool isEmpty = value.trim().isEmpty;
                   bool isInvalid = value.trim().length < 10;
-                  
+
                   if (isEmpty || isInvalid) {
                     return 'Informe uma Descrição válida';
                   }
