@@ -91,33 +91,30 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     });
 
     final products = Provider.of<Products>(context, listen: false);
-    if (_formData['id'] == null) {
-     try {
-       await products.addProduct(product);
-       Navigator.of(context).pop();
-     } catch(error) {
-       await showDialog<Null>(
+    try {
+      if (_formData['id'] == null) {
+        await products.addProduct(product);
+      } else {
+        await products.updateProduct(product);
+      }
+      Navigator.of(context).pop();
+    } catch (error) {
+      await showDialog<Null>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('Falhou!'),
-            content: Text('Ocorreu um erro para salvar o prooduto'),
-            actions: [
-              FlatButton(
-                child: Text('Fechar'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          )
-        );
-     } finally {
-       setState(() {
-          _isLoading = false;
-        });
-     }
-
-    } else {
-      products.updateProduct(product);
-      Navigator.of(context).pop();
+                title: Text('Falhou!'),
+                content: Text('Ocorreu um erro para salvar o prooduto'),
+                actions: [
+                  FlatButton(
+                    child: Text('Fechar'),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ));
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -142,7 +139,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 child: ListView(
                   children: [
                     TextFormField(
-                      initialValue: _formData['titulo'],
+                      initialValue: _formData['title'],
                       decoration: InputDecoration(labelText: 'Título'),
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
