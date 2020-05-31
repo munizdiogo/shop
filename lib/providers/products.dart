@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/exceptions/http_exception.dart';
+import 'package:shop/utils/constants.dart';
 import 'product.dart';
 
 class Products with ChangeNotifier {
-  final String _baseUrl = 'https://shopflutter-41501.firebaseio.com/products';
+  final String _baseUrl = '${Constants.BASE_API_URL}/products';
   List<Product> _items = [];
 
   List<Product> get items => [..._items];

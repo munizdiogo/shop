@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop/exceptions/http_exception.dart';
+import 'package:shop/utils/constants.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -30,7 +31,7 @@ class Product with ChangeNotifier {
 
     try {
       final String url =
-          'https://shopflutter-41501.firebaseio.com/products/$id.json';
+          '${Constants.BASE_API_URL}/products/$id.json';
       final response = await http.patch(
         url,
         body: json.encode({
