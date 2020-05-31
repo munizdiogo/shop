@@ -4,20 +4,38 @@ import '../providers/orders.dart';
 import '../widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
+  @override
+  _OrdersScreenState createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    Provider.of<Orders>(context, listen: false).loadOrders().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-  final Orders orders = Provider.of(context);
+    final Orders orders = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Meus Pedidos'),
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        itemCount: orders.itemsCount,
-        itemBuilder: (ctx, i) => OrderWidget(orders.items[i]),
-      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: orders.itemsCount,
+              itemBuilder: (ctx, i) => OrderWidget(orders.items[i]),
+            ),
     );
   }
 }
