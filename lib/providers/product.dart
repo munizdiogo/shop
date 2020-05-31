@@ -1,6 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-class Product with ChangeNotifier{
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:shop/exceptions/http_exception.dart';
+
+class Product with ChangeNotifier {
   final String id;
   final String title;
   final String description;
@@ -8,18 +12,39 @@ class Product with ChangeNotifier{
   final String imageUrl;
   bool isFavorite;
 
-  Product({
-    @required this.id,
-    @required this.title,
-    @required this.description,
-    @required this.price,
-    @required this.imageUrl,
-    this.isFavorite = false
-  });
+  Product(
+      {@required this.id,
+      @required this.title,
+      @required this.description,
+      @required this.price,
+      @required this.imageUrl,
+      this.isFavorite = false});
 
-  void toggleFavorite() {
+  void _toggleFavorite() {
     isFavorite = !isFavorite;
     notifyListeners();
   }
 
+  Future<void> toggleFavorite() async {
+    _toggleFavorite();
+
+    try {
+      final String url =
+          'https://shopflutter-41501.firebaseio.com/products/$id.json';
+      final response = await http.patch(
+        url,
+        body: json.encode({
+          "isFavorite": isFavorite,
+        }),
+      );
+
+      if (response.statusCode >= 400) {
+        isFavorite = !isFavorite;
+        notifyListeners();
+        throw HttpException('Não foi possível marcar como favorito.');
+      }
+    } catch (error) {
+      _toggleFavorite();
+    }
+  }
 }

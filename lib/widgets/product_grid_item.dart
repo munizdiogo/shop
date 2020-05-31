@@ -33,8 +33,16 @@ class ProductGridItem extends StatelessWidget {
             builder: (ctx, product, _) => IconButton(
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                product.toggleFavorite();
+              onPressed: () async {
+                try {
+                  await product.toggleFavorite();
+                } catch (error) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(error.toString()),
+                    ),
+                  );
+                }
               },
               color: Theme.of(context).accentColor,
             ),
@@ -52,9 +60,9 @@ class ProductGridItem extends StatelessWidget {
                 SnackBar(
                   content: Text(
                     'Produto adicionado com sucesso!',
-                    ),
+                  ),
                   duration: Duration(seconds: 2),
-                  action: SnackBarAction (
+                  action: SnackBarAction(
                     label: 'DESFAZER',
                     onPressed: () {
                       cart.removeSingleItem(product.id);
@@ -62,7 +70,6 @@ class ProductGridItem extends StatelessWidget {
                   ),
                 ),
               );
-              
             },
             color: Theme.of(context).accentColor,
           ),
