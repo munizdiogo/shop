@@ -91,7 +91,7 @@ class Auth with ChangeNotifier {
 
     _userId = userData["userId"];
     _token = userData["token"];
-    _expiryDate = userData["expiryDate"];
+    _expiryDate = expiryDate;
 
     _autoLogout();
     notifyListeners();
@@ -105,6 +105,7 @@ class Auth with ChangeNotifier {
     _expiryDate = null;
     if (_logoutTimer != null) {
       _logoutTimer.cancel();
+      _logoutTimer = null;
     }
     Store.remove('userData');
     notifyListeners();
@@ -113,7 +114,6 @@ class Auth with ChangeNotifier {
   void _autoLogout() {
     if(_logoutTimer != null){
       _logoutTimer.cancel();
-      _logoutTimer = null;
     }
     final timeToLogout = _expiryDate.difference(DateTime.now()).inSeconds;
     _logoutTimer = Timer(Duration(seconds: timeToLogout), logout);

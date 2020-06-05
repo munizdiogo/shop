@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/views/error_screen.dart';
 import '../providers/auth.dart';
 import '../views/auth_screen.dart';
 import '../views/products_overview_screen.dart';
@@ -14,7 +15,7 @@ class AuthOrHomeScreen extends StatelessWidget {
           if (snaphop.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if(snaphop.error != null) {
-            return Center(child: Text('Ocorreu um erro inesperado.'));
+            return ErrorScreen(snaphop.error.toString());
           } else {
             return auth.isAuth ? ProductOverviewScreen() : AuthScreen();
           }
