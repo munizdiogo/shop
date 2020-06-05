@@ -45,7 +45,6 @@ class Products with ChangeNotifier {
         'description': newProduct.description,
         'price': newProduct.price,
         'imageUrl': newProduct.imageUrl,
-        'isFavorite': newProduct.isFavorite,
       }),
     );
 
