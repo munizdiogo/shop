@@ -8,6 +8,9 @@ import 'product.dart';
 class Products with ChangeNotifier {
   final String _baseUrl = '${Constants.BASE_API_URL}/products';
   List<Product> _items = [];
+  String _token;
+
+  Products(this._token, this._items);
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems {
@@ -15,7 +18,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final response = await http.get("$_baseUrl.json");
+    final response = await http.get("$_baseUrl.json?auth=$_token");
     _items.clear();
     Map<String, dynamic> data = json.decode(response.body);
     if (data != null) {
