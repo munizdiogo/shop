@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shop/providers/auth.dart';
+import 'package:provider/provider.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -18,7 +20,7 @@ class _AuthCardState extends State<AuthCard> {
     'password': '',
   };
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_form.currentState.validate()) {
       return;
     }
@@ -29,10 +31,12 @@ class _AuthCardState extends State<AuthCard> {
 
     _form.currentState.save();
 
+    Auth auth = Provider.of<Auth>(context, listen: false);
+
     if (_authMode == AuthMode.Login) {
       // Login
     } else {
-      // Registrar
+      await auth.signup(_authData['email'], _authData['password']);
     }
 
     setState(() {
@@ -89,7 +93,7 @@ class _AuthCardState extends State<AuthCard> {
                     }
                     return null;
                   },
-                  onSaved: (value) => _authData['senha'] = value,
+                  onSaved: (value) => _authData['password'] = value,
                 ),
                 if (_authMode == AuthMode.Signup)
                   TextFormField(
